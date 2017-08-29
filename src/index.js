@@ -17,7 +17,7 @@ function returnFirstArgument(arg) {
  */
 function defaultParameterValue(a, b) {
 
-    if(b === undefined) {
+    if(typeof b === 'undefined') {
         b = 100;
     }
 
