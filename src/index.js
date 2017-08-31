@@ -1,86 +1,165 @@
-/* ДЗ 1 - Функции */
+/* ДЗ 2 - работа с исключениями и отладчиком */
 
 /*
- Задание 1:
-
- Функция должна принимать один аргумент и возвращать его
+ Задача 1:
+ Функция принимает массив и фильтрующую фукнцию и должна вернуть true или false
+ Функция должна вернуть true только если fn вернула true для всех элементов массива
+ Необходимо выбрасывать исключение в случаях:
+ - array не массив или пустой массив (с текстом "empty array")
+ - fn не является функцией (с текстом "fn is not a function")
+ Зарпещено использовать встроенные методы для работы с массивами
  */
-function returnFirstArgument(arg) {
-    return arg;
+function isAllTrue(array, fn) {
+        if (array.length === 0 || !(Array.isArray(array))) {
+            throw new Error('empty array');
+        } else if (typeof (fn) !== 'function') {
+            throw new Error('fn is not a function');
+        }
+
+        for (var i = 0; i < array.length; i++) {
+
+            if (fn(array[i]) === false) {
+                return false
+            }
+        }
+    return true
 }
 
 /*
- Задание 2:
-
- Функция должна принимать два аргумента и возвращать сумму переданных значений
- Значение по умолчанию второго аргумента должно быть 100
+ Задача 2:
+ Функция принимает массив и фильтрующую фукнцию и должна вернуть true или false
+ Функция должна вернуть true если fn вернула true хотя бы для одного из элементов массива
+ Необходимо выбрасывать исключение в случаях:
+ - array не массив или пустой массив (с текстом "empty array")
+ - fn не является функцией (с текстом "fn is not a function")
+ Зарпещено использовать встроенные методы для работы с массивами
  */
-function defaultParameterValue(a, b) {
+function isSomeTrue(array, fn) {
+        if (array.length === 0 || !(Array.isArray(array))) {
+            throw new Error('empty array');
+        } else if (typeof (fn) !== 'function') {
+            throw new Error('fn is not a function');
+        }
 
-    if(typeof b === 'undefined') {
-        b = 100;
+        for (var i = 0; i < array.length; i++) {
+
+            if (fn(array[i]) === true) {
+                return true
+            }
+        }
+
+        return false
+}
+
+/*
+ Задача 3:
+ Функция принимает заранее неизветсное количество аргументов, первым из которых является функция fn
+ Функция должна поочередно запусти fn для каждого переданного аргумента (кроме самой fn)
+ Функция должна вернуть массив аргументов, для которых fn выбросила исключение
+ Необходимо выбрасывать исключение в случаях:
+ - fn не является функцией (с текстом "fn is not a function")
+ */
+function returnBadArguments(fn) {
+    if (typeof (fn) !== 'function') {
+        throw new Error('fn is not a function');
     }
 
-    var res = a + b;
+    var args = [];
 
-    return res;
-}
+    for (var i = 1; i < arguments.length; i++) {
 
-/*
- Задание 3:
-
- Функция должна возвращать все переданные в нее аргументы в виде массива
- Количество переданных аргументов заранее неизвестно
- */
-function returnArgumentsArray() {
-    var result = [];
-
-    for(var i = 0; i < arguments.length; i++) {
-        result[i] = arguments[i];
+        try {
+            fn(arguments[i]);
+        } catch (e) {
+            args.push(arguments[i]);
+            console.log(args);
+        }
     }
 
-    return result;
+    return args;
 }
 
 /*
- Задание 4:
+ Задача 4:
+ Функция имеет параметр number (по умолчанию - 0)
+ Функция должна вернуть объект, у которого должно быть несколько методов:
+ - sum - складывает number с переданными аргументами
+ - dif - вычитает из number переданные аргументы
+ - div - делит number на первый аргумент. Результат делится на следующий аргумент (если передан) и так далее
+ - mul - умножает number на первый аргумент. Результат умножается на следующий аргумент (если передан) и так далее
 
- Функция должна принимать другую функцию и возвращать результат вызова переданной функции
+ Количество передаваемых в методы аргументов заранее неизвестно
+ Необходимо выбрасывать исключение в случаях:
+ - number не является числом (с текстом "number is not a number")
+ - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-function returnFnResult(fn) {
-        return fn();
-}
+function calculator(number) {
 
-/*
- Задание 5:
+    var num = number || 0;
 
- Функция должна принимать число (значение по умолчанию - 0) и возвращать функцию (F)
- При вызове F, переданное число должно быть увеличено на единицу и возвращено из F
- */
-function returnCounter(number) {
-    var sum = number || 0;
-
-    return function F() {
-        sum += 1;
-
-        return sum;
+    if (typeof (num) !== 'number') {
+        throw new Error('number is not a number');
     }
-}
 
-/*
- Задание 6 *:
+    return {
+        sum: function () {
 
- Функция должна принимать другую функцию (F) и некоторое количество дополнительных аргументов
- Функция должна привязать переданные аргументы к функции F и вернуть получившуюся функцию
- */
-function bindFunction(fn) {
+            var res = num;
+
+            for (var i = 0; i < arguments.length; i++) {
+                res += arguments[i];
+            }
+
+            return res;
+
+        },
+
+        dif: function () {
+
+            var res = num;
+
+            for (var i = 0; i < arguments.length; i++) {
+                res -= arguments[i];
+            }
+
+            return res;
+        },
+
+        div: function () {
+
+            var res = num;
+
+            for (var i = 0; i < arguments.length; i++) {
+
+                if (arguments[i] === 0) {
+                    throw new Error('division by 0');
+                }
+
+                res /= arguments[i];
+            }
+
+            return res;
+
+        },
+
+        mul: function () {
+
+            var res = num;
+
+            for (var i = 0; i < arguments.length; i++) {
+                res *= arguments[i];
+            }
+
+            return res;
+        }
+
+    }
 }
 
 export {
-    returnFirstArgument,
-    defaultParameterValue,
-    returnArgumentsArray,
-    returnFnResult,
-    returnCounter,
-    bindFunction
-}
+    isAllTrue,
+    isSomeTrue,
+    returnBadArguments,
+    calculator
+};
+
