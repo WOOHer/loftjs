@@ -52,9 +52,13 @@ function reduce(array, fn, initial) {
  Функция должна удалить указанное свойство из указанного объекта
  */
 function deleteProperty(obj, prop) {
+<<<<<<< HEAD
     if (obj.hasOwnProperty(prop)) {
         delete obj[prop];
     }
+=======
+    delete obj[prop];
+>>>>>>> c9eccdd02d71ba768af176061a82748e2d08823d
 }
 
 /*
@@ -63,6 +67,7 @@ function deleteProperty(obj, prop) {
  Функция должна проверить существует ли укзаанное свойство в указанном объекте
  */
 function hasProperty(obj, prop) {
+<<<<<<< HEAD
     if (obj.hasOwnProperty(prop)) {
         return true;
     }
@@ -70,12 +75,22 @@ function hasProperty(obj, prop) {
     return false;
 }
 
+=======
+    if (prop in obj) {
+        return true;
+    }
+
+    return false;
+}
+
+>>>>>>> c9eccdd02d71ba768af176061a82748e2d08823d
 /*
  Задача 6:
  Функция должна получить все перечисляемые свойства объекта и вернуть их в виде массива
  */
 function getEnumProps(obj) {
     var arr = [];
+<<<<<<< HEAD
 
     for (var props in obj) {
         arr.push(props);
@@ -91,6 +106,23 @@ function getEnumProps(obj) {
 function upperProps(obj) {
     var arr = [];
 
+=======
+
+    for (var props in obj) {
+        arr.push(props);
+    }
+
+    return arr;
+}
+
+/*
+ Задача 7:
+ Функция должна перебрать все свойства объекта, преобразовать их имена в верхний регистра и вернуть в виде массива
+ */
+function upperProps(obj) {
+    var arr = [];
+
+>>>>>>> c9eccdd02d71ba768af176061a82748e2d08823d
     for (var props in obj) {
         arr.push(props.toUpperCase());
     }
@@ -103,6 +135,7 @@ function upperProps(obj) {
  Напишите аналог встроенного метода slice для работы с массивами
  */
 function slice(array, from, to) {
+<<<<<<< HEAD
     for (var i = 0; i < array.length; i++) {
         var arr = array[i];
     }
@@ -110,6 +143,14 @@ function slice(array, from, to) {
     return arr.prototype.slice.call(this, from, to);
 }
 
+=======
+    from = array[i] < to;
+    to = (array[i] > from) - 1;
+    var arr = [];
+    arr.push(from, array.length, to);
+}
+
+>>>>>>> c9eccdd02d71ba768af176061a82748e2d08823d
 /*
  Задача 9 *:
  Функция принимает объект и должна вернуть Proxy для этого объекта
